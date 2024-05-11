@@ -41,14 +41,14 @@ function ExercisePage() {
         }
     };
 
-    // get exercises by muscle
+    // get random exercise by muscle
+    const [renderMuscleExerciseGroup, setRenderMuscleExerciseGroup] = useState(false);
     const [muscleExerciseGroup, setMuscleGroup] = useState([]);
-
     const handleMuscleGroup = async (muscleGroup) => {
         try {
             const response = await axios.get(`http://localhost:3002/exercise/${muscleGroup}`);
             setMuscleGroup(response.data);
-            console.log(response.data)
+            setRenderMuscleExerciseGroup(true);
         } catch (err) {
             console.error('Error fetching data:', err);
         }
@@ -91,10 +91,36 @@ function ExercisePage() {
                         </table>
                     </div>
                 </div>
-                <div>
-                    <SearchDropdown 
-                        onSelect={handleMuscleGroup}
-                    />
+                <div className="random-exercise-generator-description">
+                    <div>
+                        <h4>
+                            Random Exercise Generator
+                        </h4>
+                        <p>
+                            Choose a muscle to randomly generate an exercise for workout inspiration!
+                        </p>
+                        <SearchDropdown onSelect={handleMuscleGroup}/>
+                    </div>
+                    <div>
+                        {renderMuscleExerciseGroup ? 
+                        <div>
+                            <h4>
+                            Name of Exercise
+                            </h4>
+                            <p>
+                                {muscleExerciseGroup.name}
+                            </p>
+                            <h4>
+                                How to Perform the Exercise
+                            </h4>
+                            <p style={{width: "50%", marginLeft: "auto", marginRight: "auto"}}>
+                                {muscleExerciseGroup.instructions}
+                            </p>
+                        </div> : 
+                        <div>
+                        </div>
+                        }
+                    </div>
                 </div>
                 <div className="button-container">
                     <br></br>

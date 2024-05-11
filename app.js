@@ -11,6 +11,13 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 
+// modified from https://stackoverflow.com/questions/42739256/how-get-random-item-from-es6-map-or-set
+function getRandomKey(collection) {
+    let keys = Array.from(collection.keys());
+    const specifiedItem = keys[Math.floor(Math.random() * keys.length)];
+    return collection[specifiedItem]
+}
+
 // get list of exercises for a muscle group from api-ninjas
 app.get("/exercise/:muscle", async (req, res) => {
     try {
@@ -24,8 +31,8 @@ app.get("/exercise/:muscle", async (req, res) => {
                 return console.error('Request failed:', error);
             else if(response.statusCode != 200) 
                 return console.error('Error:', response.statusCode, body.toString('utf8'));
-            else 
-                res.send(JSON.parse(response.body));
+            else
+                res.send(getRandomKey(JSON.parse(response.body)));
         });
     } catch (error) {
         console.error('Error fetching exercise data:', error);
